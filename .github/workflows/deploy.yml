@@ -8,7 +8,7 @@ on:
 
 jobs:
   deploy:
-    name: Build & Deploy
+    name: Build & Push
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -16,7 +16,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with:
-        ref: master
+        ref: main
 
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v3
