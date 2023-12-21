@@ -277,7 +277,7 @@ new Vue({
 
     Promise.resolve().then(async () => {
       const currentRelease = await this.api.getRelease();
-      const latestRelease = await fetch('https://raw.githubusercontent.com/leesonaa/wg/master/docs/changelog.json')
+      const latestRelease = await fetch('https://raw.githubusercontent.com/leesonaa/wgcnv6-easy/main/docs/changelog.json')
         .then(res => res.json())
         .then(releases => {
           const releasesArray = Object.entries(releases).map(([version, changelog]) => ({
