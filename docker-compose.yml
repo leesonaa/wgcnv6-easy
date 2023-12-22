@@ -1,23 +1,17 @@
 version: "3.8"
 services:
   wg-easy:
+    image: leesonaa/wgcnv6-easy
+    container_name: wg-easy
     environment:
-      # ⚠️ Required:
-      # Change this to your host's public address
-      - WG_HOST=raspberrypi.local   # you.domain.com 你的域名地址 不要协议头
-
-      # Optional:
-      # - PASSWORD=foobar123          # *必填 web登录密码
+      - WG_HOST=raspberrypi.local   # you.domain.com 你的域名地址 不要协议头 ⚠️ 
+      - PASSWORD=foobar123          # *必填 web登录密码  ⚠️ 
       # - WG_PORT=51820               # 可选 如果是bridge的方式部署 这里写容器外的端口号
       # - WG_DEFAULT_ADDRESS_IPV4=10.8.0.x    # 可选 你的wg私网网段  最后一个必须是  x 
       # - WG_DEFAULT_ADDRESS_IPV6=fd42:42:42::x   # 可选 你的wg v6私网网段 最后一个必须是 x 可以保持默认
       # - WG_DEFAULT_DNS=223.5.5.5                 # 可选 默认是阿里云的v4&v6的公共dns地址
       # - WG_MTU=1420                               # 可选 
       # - WG_ALLOWED_IPS=192.168.15.0/24, 10.0.1.0/24     # 可选 默认是任何地址0.0.0.0/24 ::0/64
-      
-      
-    image: leesonaa/wgcnv6-easy
-    container_name: wg-easy
     #privileged: true # for podman issues   # 一般不需要特权
     volumes:
       - ${youpath}/wg:/etc/wireguard
@@ -28,7 +22,7 @@ services:
     cap_add:
       - NET_ADMIN
       - SYS_MODULE
-    sysctls:                                    # 从这里开始  如果是bridge模式 就必须带上这一段 v6的话 如果wan侧有v6 lan侧没有 用socat或者lucky 从主路由把入站的udp端口甩过来 
+    sysctls:                                    # ⚠️ 从这里开始  如果是bridge模式 就必须带上这一段 ,v6的话 如果wan侧有v6 lan侧没有 用socat或者lucky 从主路由把入站的udp端口甩过来 
       - net.ipv4.ip_forward=1                       # 如果是lan测也有v6,也就是宿主机有v6 建议直接host模式 sysctls这段注释掉
       - net.ipv4.conf.all.src_valid_mark=1
       - net.ipv6.conf.all.disable_ipv6=0
