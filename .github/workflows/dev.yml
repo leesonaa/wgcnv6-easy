@@ -1,4 +1,4 @@
-name: Build & Publish Docker Image to GitHub Container Registry
+name: dev build test
 
 on:
   workflow_dispatch:
