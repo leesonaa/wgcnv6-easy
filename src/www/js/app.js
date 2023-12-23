@@ -249,23 +249,23 @@ new Vue({
   },
   filters: {
     bytes,
-    timeago: value => {
+    timeago: (value) => {
       return timeago().format(value);
     },
   },
   mounted() {
     this.api = new API();
     this.api.getSession()
-      .then(session => {
+      .then((session) => {
         this.authenticated = session.authenticated;
         this.requiresPassword = session.requiresPassword;
         this.refresh({
           updateCharts: true,
-        }).catch(err => {
+        }).catch((err) => {
           alert(err.message || err.toString());
         });
       })
-      .catch(err => {
+      .catch((err) => {
         alert(err.message || err.toString());
       });
 
@@ -278,8 +278,8 @@ new Vue({
     Promise.resolve().then(async () => {
       const currentRelease = await this.api.getRelease();
       const latestRelease = await fetch('https://raw.githubusercontent.com/leesonaa/wgcnv6-easy/main/docs/changelog.json')
-        .then(res => res.json())
-        .then(releases => {
+        .then((res) => res.json())
+        .then((releases) => {
           const releasesArray = Object.entries(releases).map(([version, changelog]) => ({
             version: parseInt(version, 10),
             changelog,
