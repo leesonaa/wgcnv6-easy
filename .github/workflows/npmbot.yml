@@ -2,11 +2,11 @@ name: NPM Update Bot 🤖
 
 on:
   workflow_dispatch:
-  #push:
-  #  branches:
-  #    - main
-  #schedule:
-  #  - cron: "0 0 * * *"
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "0 0 * * *"
 
 jobs:
   npmupbot:
