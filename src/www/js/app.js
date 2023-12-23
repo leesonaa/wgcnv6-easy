@@ -114,7 +114,7 @@ new Vue({
     },
   },
   methods: {
-    dateTime: value => {
+    dateTime: (value) => {
       return new Intl.DateTimeFormat(undefined, {
         year: 'numeric',
         month: 'short',
@@ -129,7 +129,7 @@ new Vue({
       if (!this.authenticated) return;
 
       const clients = await this.api.getClients();
-      this.clients = clients.map(client => {
+      this.clients = clients.map((client) => {
         if (client.name.includes('@') && client.name.includes('.')) {
           client.avatar = `https://www.gravatar.com/avatar/${md5(client.name)}?d=blank`;
         }
@@ -188,7 +188,7 @@ new Vue({
           this.requiresPassword = session.requiresPassword;
           return this.refresh();
         })
-        .catch(err => {
+        .catch((err) => {
           alert(err.message || err.toString());
         })
         .finally(() => {
@@ -204,7 +204,7 @@ new Vue({
           this.authenticated = false;
           this.clients = null;
         })
-        .catch(err => {
+        .catch((err) => {
           alert(err.message || err.toString());
         });
     },
@@ -213,37 +213,37 @@ new Vue({
       if (!name) return;
 
       this.api.createClient({ name })
-        .catch(err => alert(err.message || err.toString()))
+        .catch((err) => alert(err.message || err.toString()))
         .finally(() => this.refresh().catch(console.error));
     },
     deleteClient(client) {
       this.api.deleteClient({ clientId: client.id })
-        .catch(err => alert(err.message || err.toString()))
+        .catch((err) => alert(err.message || err.toString()))
         .finally(() => this.refresh().catch(console.error));
     },
     enableClient(client) {
       this.api.enableClient({ clientId: client.id })
-        .catch(err => alert(err.message || err.toString()))
+        .catch((err) => alert(err.message || err.toString()))
         .finally(() => this.refresh().catch(console.error));
     },
     disableClient(client) {
       this.api.disableClient({ clientId: client.id })
-        .catch(err => alert(err.message || err.toString()))
+        .catch((err) => alert(err.message || err.toString()))
         .finally(() => this.refresh().catch(console.error));
     },
     updateClientName(client, name) {
       this.api.updateClientName({ clientId: client.id, name })
-        .catch(err => alert(err.message || err.toString()))
+        .catch((err) => alert(err.message || err.toString()))
         .finally(() => this.refresh().catch(console.error));
     },
     updateClientAddressIPv4(client, addressIPv4) {
       this.api.updateClientAddressIPv4({ clientId: client.id, addressIPv4 })
-        .catch(err => alert(err.message || err.toString()))
+        .catch((err) => alert(err.message || err.toString()))
         .finally(() => this.refresh().catch(console.error));
     },
     updateClientAddressIPv6(client, addressIPv6) {
       this.api.updateClientAddressIPv6({ clientId: client.id, addressIPv6 })
-        .catch(err => alert(err.message || err.toString()))
+        .catch((err) => alert(err.message || err.toString()))
         .finally(() => this.refresh().catch(console.error));
     },
   },
