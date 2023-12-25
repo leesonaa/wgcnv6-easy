@@ -2,14 +2,17 @@ name: NPM Update Bot 🤖
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ 'main' ]
   schedule:
-    - cron: "0 0 * * *"
+    - cron: '0 0 * * *'
+
 
 jobs:
   npmupbot:
     name: NPM Update Bot 🤖
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout repository
