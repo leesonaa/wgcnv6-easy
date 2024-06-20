@@ -1,0 +1,40 @@
+name: Push Docker Images
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  push-images:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Pull all architectures from ghcr.io
+        run: |
+          docker pull ghcr.io/imagegenius/immich:latest
+          docker manifest inspect ghcr.io/imagegenius/immich:latest | jq -r '.manifests[].platform.architecture' | while read arch; do
+            docker pull ghcr.io/imagegenius/immich:latest-$arch
+          done
+
+      - name: Tag and push to Docker Hub
+        run: |
+          docker manifest inspect ghcr.io/imagegenius/immich:latest | jq -r '.manifests[].platform.architecture' | while read arch; do
+            docker tag ghcr.io/imagegenius/immich:latest-$arch ${{ secrets.DOCKER_USERNAME }}/immich:latest-$arch
+            docker push ${{ secrets.DOCKER_USERNAME }}/immich:latest-$arch
+          done
+
+      - name: Create and push manifest
+        run: |
+          docker manifest create ${{ secrets.DOCKER_USERNAME }}/immich:latest \
+            $(docker manifest inspect ghcr.io/imagegenius/immich:latest | jq -r '.manifests[].platform.architecture' | while read arch; do echo ${{ secrets.DOCKER_USERNAME }}/immich:latest-$arch; done)
+          docker manifest push ${{ secrets.DOCKER_USERNAME }}/immich:latest
