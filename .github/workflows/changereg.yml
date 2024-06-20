@@ -1,12 +1,11 @@
-name: Push Docker Images
-
+name: Pull and Push Multi-Architecture Image
 on:
   push:
     branches:
-      - main
+      - main  # 根据需要调整触发分支
 
 jobs:
-  push-images:
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:
@@ -22,22 +21,13 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Pull all architectures from ghcr.io
+      - name: Pull and push multi-architecture image
         run: |
-          docker pull ghcr.io/imagegenius/immich:latest
-          docker manifest inspect ghcr.io/imagegenius/immich:latest | jq -r '.manifests[].platform.architecture' | while read arch; do
-            docker pull ghcr.io/imagegenius/immich:latest-$arch
-          done
+          # 拉取源镜像的所有架构
+          docker buildx imagetools create --tag temp/immich:latest ghcr.io/imagegenius/immich:latest
+          
+          # 创建并推送目标镜像的多架构支持
+          docker buildx imagetools create --tag ${{ secrets.DOCKERHUB_USERNAME }}/immich:latest temp/immich:latest
 
-      - name: Tag and push to Docker Hub
-        run: |
-          docker manifest inspect ghcr.io/imagegenius/immich:latest | jq -r '.manifests[].platform.architecture' | while read arch; do
-            docker tag ghcr.io/imagegenius/immich:latest-$arch ${{ secrets.DOCKER_USERNAME }}/immich:latest-$arch
-            docker push ${{ secrets.DOCKER_USERNAME }}/immich:latest-$arch
-          done
 
-      - name: Create and push manifest
-        run: |
-          docker manifest create ${{ secrets.DOCKER_USERNAME }}/immich:latest \
-            $(docker manifest inspect ghcr.io/imagegenius/immich:latest | jq -r '.manifests[].platform.architecture' | while read arch; do echo ${{ secrets.DOCKER_USERNAME }}/immich:latest-$arch; done)
-          docker manifest push ${{ secrets.DOCKER_USERNAME }}/immich:latest
+
