@@ -1,21 +1,23 @@
 // eslint.config.js
-const athomConfig = require('eslint-config-athom'); // 如果 `athom` 是通过 npm 安装的
+const athomConfig = require('eslint-config-athom');  // 引入扩展的配置
 
 module.exports = [
-  athomConfig,  // 直接引入扩展配置
+  athomConfig,  // 包含扩展配置
   {
-    ignores: ['**/vendor/*.js'], // 忽略模式
+    ignores: ['**/vendor/*.js'],  // 忽略模式
     languageOptions: {
-      ecmaVersion: 2021,         // ECMAScript 版本
-      sourceType: 'module',      // 源代码类型
+      ecmaVersion: 2021,
+      sourceType: 'module',
+      parser: require('some-custom-parser'),  // 将 parser 放在 languageOptions 下
     },
     rules: {
-      'consistent-return': 'off',  // 自定义规则
+      'consistent-return': 'off',
       'no-shadow': 'off',
       'max-len': 'off',
     },
   },
 ];
+
 
 
 
