@@ -6,14 +6,14 @@ module.exports = [
       ecmaVersion: 2021,         // ECMAScript 版本
       sourceType: 'module',      // ECMAScript 模块
     },
-    linterOptions: {
-      rules: {
-        'consistent-return': 'off',
-        'no-shadow': 'off',
-        'max-len': 'off',
-      },
+    // 将规则直接放在顶层
+    rules: {
+      'consistent-return': 'off',
+      'no-shadow': 'off',
+      'max-len': 'off',
     },
     extends: ['athom'], // 扩展配置
   },
 ];
+
 
