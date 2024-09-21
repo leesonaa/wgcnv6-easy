@@ -14,17 +14,17 @@ module.exports.WG_DEFAULT_ADDRESS_IPV4 = process.env.WG_DEFAULT_ADDRESS_IPV4 || 
 module.exports.WG_DEFAULT_ADDRESS_IPV6 = process.env.WG_DEFAULT_ADDRESS_IPV6 || 'fd42:42:42::x';
 module.exports.WG_DEFAULT_DNS = typeof process.env.WG_DEFAULT_DNS === 'string'
   ? process.env.WG_DEFAULT_DNS
-  : '223.5.5.5,223.6.6.6,2400:3200::1,2400:3200:baba::1';
+  : '223.5.5.5,223.6.6.6';
 module.exports.WG_ALLOWED_IPS = process.env.WG_ALLOWED_IPS || '0.0.0.0/0, ::/0';
 
 module.exports.WG_PRE_UP = process.env.WG_PRE_UP || '';
 module.exports.WG_POST_UP = process.env.WG_POST_UP || `
 iptables -t nat -A POSTROUTING -s ${module.exports.WG_DEFAULT_ADDRESS_IPV4.replace('x', '0')}/24 -o eth0 -j MASQUERADE;
-iptables -A INPUT -p udp -m udp --dport 51820 -j ACCEPT;
+iptables -A INPUT -p udp -m udp --dport ${module.exports.WG_PORT} -j ACCEPT;
 iptables -A FORWARD -i wg0 -j ACCEPT;
 iptables -A FORWARD -o wg0 -j ACCEPT;
 ip6tables -t nat -A POSTROUTING -s ${module.exports.WG_DEFAULT_ADDRESS_IPV6.replace('x', '0')}/64 -o eth0 -j MASQUERADE;
-ip6tables -A INPUT -p udp -m udp --dport 51820 -j ACCEPT;
+ip6tables -A INPUT -p udp -m udp --dport ${module.exports.WG_PORT} -j ACCEPT;
 ip6tables -A FORWARD -i wg0 -j ACCEPT;
 ip6tables -A FORWARD -o wg0 -j ACCEPT;
 `.split('\n').join(' ');
