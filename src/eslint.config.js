@@ -1,8 +1,9 @@
-export default [
+// eslint.config.js (CommonJS 格式)
+module.exports = [
   {
     ignores: ['**/vendor/*.js'], // 忽略规则
     languageOptions: {
-      ecmaVersion: 2021,         // 可根据项目需要设置 ECMAScript 版本
+      ecmaVersion: 2021,         // ECMAScript 版本
       sourceType: 'module',      // ECMAScript 模块
     },
     linterOptions: {
@@ -12,7 +13,7 @@ export default [
         'max-len': 'off',
       },
     },
-    // 扩展规则集
-    extends: ['athom'], // 需要确保 "athom" 这个扩展依然可用
+    extends: ['athom'], // 扩展配置
   },
 ];
+
